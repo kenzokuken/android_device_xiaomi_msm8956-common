@@ -119,10 +119,6 @@ PRODUCT_PACKAGES += \
     memtrack.msm8952 \
     liboverlay
 
-# Doze mode
-PRODUCT_PACKAGES += \
-    XiaomiDoze
-
 # Face detection extension
 PRODUCT_PACKAGES += \
     org.codeaurora.camera
@@ -170,7 +166,7 @@ PRODUCT_PACKAGES += \
 
 # IRQ
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/msm_irqbalance_little_big.conf:system/vendor/etc/msm_irqbalance_little_big.conf
+    $(LOCAL_PATH)/configs/msm_irqbalance.conf:system/vendor/etc/msm_irqbalance.conf
 
 # Lights
 PRODUCT_PACKAGES += \
