@@ -1,4 +1,4 @@
-/* Copyright (c) 2015, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2015, 2020 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -31,7 +31,9 @@
 #define __LOC_TIMER_CPP_H__
 
 #include <stddef.h>
-#include <log_util.h>
+#include <loc_pla.h>
+
+namespace loc_util {
 
 // opaque class to provide service implementation.
 class LocTimerDelegate;
@@ -70,5 +72,7 @@ public:
     //  should be short enough (eg: send a message to your own thread).
     virtual void timeOutCallback() = 0;
 };
+
+} // namespace loc_util
 
 #endif //__LOC_DELAY_H__

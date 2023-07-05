@@ -1,17 +1,17 @@
-# configure.ac -- Autoconf script for gps loc_api
+# configure.ac -- Autoconf script for gps loc_hal
 #
 # Process this file with autoconf to produce a configure script
 
 # Requires autoconf tool later than 2.61
 AC_PREREQ(2.61)
-# Initialize the gps loc_api package version 1.0.0
-AC_INIT([loc-api],1.0.0)
+# Initialize the gps loc-hal package version 1.0.0
+AC_INIT([loc-hal],1.0.0)
 # Does not strictly follow GNU Coding standards
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 # Disables auto rebuilding of configure, Makefile.ins
 AM_MAINTAINER_MODE
 # Verifies the --srcdir is correct by checking for the path
-AC_CONFIG_SRCDIR([utils/loc_cfg.cpp])
+AC_CONFIG_SRCDIR([Makefile.am])
 # defines some macros variable to be included by source
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -29,19 +29,21 @@ AC_PROG_MAKE_SET
 PKG_PROG_PKG_CONFIG
 
 # Checks for libraries.
-PKG_CHECK_MODULES([QMIF], [qmi-framework])
-AC_SUBST([QMIF_CFLAGS])
-AC_SUBST([QMIF_LIBS])
+PKG_CHECK_MODULES([GPSUTILS], [gps-utils])
+AC_SUBST([GPSUTILS_CFLAGS])
+AC_SUBST([GPSUTILS_LIBS])
 
-AC_ARG_WITH([libhardware_includes],
-      AC_HELP_STRING([--with-libhardware-includes=@<:@dir@:>@],
-         [Specify the location of the libhardware headers]),
-      [libhardware_incdir=$withval],
-      with_libhardware_includes=no)
+PKG_CHECK_MODULES([LOCCORE], [loc-core])
+AC_SUBST([LOCCORE_CFLAGS])
+AC_SUBST([LOCCORE_LIBS])
 
-if test "x$with_libhardware_includes" != "xno"; then
-   CPPFLAGS="${CPPFLAGS} -I${libhardware_incdir}"
-fi
+AC_ARG_WITH([auto_feature],
+    AC_HELP_STRING([--with-auto_feature=@<:@dir@:>@],
+        [Using Automotive feature]),
+    [],
+    with_auto_feature=no)
+
+AM_CONDITIONAL(USE_FEATURE_AUTOMOTIVE, test "x${with_auto_feature}" = "xyes")
 
 AC_ARG_WITH([core_includes],
       AC_HELP_STRING([--with-core-includes=@<:@dir@:>@],
@@ -51,6 +53,16 @@ AC_ARG_WITH([core_includes],
 
 if test "x$with_core_includes" != "xno"; then
    CPPFLAGS="${CPPFLAGS} -I${core_incdir}"
+fi
+
+AC_ARG_WITH([locpla_includes],
+      AC_HELP_STRING([--with-locpla-includes=@<:@dir@:>@],
+         [specify the path to locpla-includes in loc-pla_git.bb]),
+      [locpla_incdir=$withval],
+      with_locpla_includes=no)
+
+if test "x$with_locpla_includes" != "xno"; then
+   AC_SUBST(LOCPLA_CFLAGS, "-I${locpla_incdir}")
 fi
 
 AC_SUBST([CPPFLAGS])
@@ -76,10 +88,8 @@ AM_CONDITIONAL(USE_GLIB, test "x${with_glib}" = "xyes")
 
 AC_CONFIG_FILES([ \
         Makefile \
-        utils/Makefile \
-        loc_api/libloc_api_50001/Makefile \
-        loc_api/loc_api_v02/Makefile \
-        loc-api.pc \
+        gnss/Makefile \
+        loc-hal.pc \
         ])
 
 AC_OUTPUT
