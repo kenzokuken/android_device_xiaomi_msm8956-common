@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013, 2016, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -30,6 +30,7 @@
 #ifndef __MM_QCAMERA_MAIN_MENU_H__
 #define __MM_QCAMERA_MAIN_MENU_H__
 
+// Camera dependencies
 #include "mm_camera_interface.h"
 #include "mm_jpeg_interface.h"
 
@@ -52,10 +53,10 @@ typedef enum
   STOP_PREVIEW,
   SET_WHITE_BALANCE,
   SET_TINTLESS_ENABLE,
-  SET_TINTLESS_DISABLE,
+  TOGGLE_SHDR,
   SET_EXP_METERING,
-  GET_CTRL_VALUE,
-  TOGGLE_AFR,
+  TOGGLE_IRLED,
+  TOGGLE_EZTUNE,
   SET_ISO,
   BRIGHTNESS_GOTO_SUBMENU,
   CONTRAST_GOTO_SUBMENU,
@@ -73,6 +74,12 @@ typedef enum
   TAKE_RAW_SNAPSHOT,
   SWITCH_SNAP_RESOLUTION,
   TOGGLE_WNR,
+  SPECIAL_EFFECTS,
+  SET_MN_WHITE_BALANCE,
+  ANTI_BANDING,
+  SET_FLIP_MODE,
+  BURST_MODE_SNAPSHOT,
+  CONCURRENT_NDR_NONHDR,
   EXIT
 } Camera_main_menu_t;
 
@@ -82,11 +89,13 @@ typedef enum
   ACTION_START_PREVIEW,
   ACTION_STOP_PREVIEW,
   ACTION_SET_WHITE_BALANCE,
+  ACTION_SET_MN_WHITE_BALANCE,
   ACTION_SET_TINTLESS_ENABLE,
-  ACTION_SET_TINTLESS_DISABLE,
+  ACTION_TOGGLE_SHDR,
   ACTION_SET_EXP_METERING,
-  ACTION_GET_CTRL_VALUE,
+  ACTION_TOGGLE_IR_MODE,
   ACTION_TOGGLE_AFR,
+  ACTION_TOGGLE_EZTUNE,
   ACTION_SET_ISO,
   ACTION_BRIGHTNESS_INCREASE,
   ACTION_BRIGHTNESS_DECREASE,
@@ -110,6 +119,11 @@ typedef enum
   ACTION_TAKE_RAW_SNAPSHOT,
   ACTION_SWITCH_RESOLUTION,
   ACTION_TOGGLE_WNR,
+  ACTION_SPECIAL_EFFECTS,
+  ACTION_ANTI_BANDING,
+  ACTION_BURST_MODE_SNAPSHOT,
+  ACTION_FLIP_MODE,
+  ACTION_CONCURRENT_NDR_NONHDR,
   ACTION_EXIT
 } camera_action_t;
 
@@ -264,6 +278,39 @@ typedef enum {
 }Bestshot_modes;
 
 typedef enum {
+  SPL_EFFECT_OFF,
+  SPL_EFFECT_MONO,
+  SPL_EFFECT_NEGATIVE,
+  SPL_EFFECT_SOLARIZE,
+  SPL_EFFECT_SEPIA,
+  SPL_EFFECT_POSTERIZE,
+  SPL_EFFECT_WHITEBOARD,
+  SPL_EFFECT_BLACKBOARD,
+  SPL_EFFECT_AQUA,
+  SPL_EFFECT_EMBOSS,
+  SPL_EFFECT_SKETCH,
+  SPL_EFFECT_NEON,
+  SPL_EFFECT_BEAUTY,
+  SPL_EFFECT_MAX
+} spl_effect_modes;
+
+typedef enum {
+  ANTIBANDING_OFF,
+  ANTIBANDING_60HZ,
+  ANTIBANDING_50HZ,
+  ANTIBANDING_AUTO,
+  ANTIBANDING_MAX,
+}antibanding_types;
+
+typedef enum {
+  MODE_NO_FLIP,
+  MODE_FLIP_H,
+  MODE_FLIP_V,
+  MODE_FLIP_V_H,
+  MODE_FLIP_MAX,
+}flipmodes_types;
+
+typedef enum {
     FLASH_MODE_OFF,
     FLASH_MODE_AUTO,
     FLASH_MODE_ON,
@@ -272,6 +319,7 @@ typedef enum {
 }Flash_modes;
 
 typedef enum {
+  WB_OFF,
   WB_AUTO,
   WB_INCANDESCENT,
   WB_FLUORESCENT,
@@ -280,8 +328,15 @@ typedef enum {
   WB_CLOUDY_DAYLIGHT,
   WB_TWILIGHT,
   WB_SHADE,
+  WB_MANUAL,
   WB_MAX
 } White_Balance_modes;
+
+typedef enum {
+  MANUAL_WB_CCT,
+  MANUAL_WB_GAIN,
+  MANUAL_WB_MAX
+}Manual_wb_modes;
 
 typedef enum
 {
@@ -301,6 +356,10 @@ typedef enum
   MENU_ID_FLASHMODE,
   MENU_ID_SENSORS,
   MENU_ID_SWITCH_RES,
+  MENU_ID_SPECIAL_EFFECTS,
+  MENU_ID_WHITEBALANCE_MANUAL,
+  MENU_ID_ANTI_BANDING,
+  MENU_ID_FLIP_MODE,
   MENU_ID_INVALID,
 } menu_id_change_t;
 
@@ -376,6 +435,11 @@ typedef struct {
 } WHITE_BALANCE_TBL_T;
 
 typedef struct {
+  Manual_wb_modes wb_id;
+  char * wb_name;
+} MN_WHITE_BALANCE_TBL_T;
+
+typedef struct {
   Get_Ctrl_modes get_ctrl_id;
   char * get_ctrl_name;
 } GET_CTRL_TBL_T;
@@ -389,6 +453,21 @@ typedef struct {
   Bestshot_modes bs_id;
   char *name;
 } BESTSHOT_MODE_TBT_T;
+
+typedef struct {
+  spl_effect_modes sp_id;
+  char *name;
+} SPECIAL_EFFECT_MODE_TBT_T;
+
+typedef struct {
+  antibanding_types sp_id;
+  char *name;
+} ANTI_BANDING_TBT_T;
+
+typedef struct {
+  flipmodes_types sp_id;
+  char *name;
+}FLIP_MODES_TBT_T;
 
 typedef struct {
   Flash_modes bs_id;

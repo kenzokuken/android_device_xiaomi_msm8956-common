@@ -15,26 +15,53 @@ ifeq ($(strip $(TARGET_USES_ION)),true)
 LOCAL_CFLAGS += -DUSE_ION
 endif
 
-OMX_HEADER_DIR := frameworks/native/include/media/openmax
-OMX_CORE_DIR := device/xiaomi/msm8956-common/camera/mm-image-codec
+JPEG_PIPELINE_TARGET_LIST := msm8994
+JPEG_PIPELINE_TARGET_LIST += msm8992
+JPEG_PIPELINE_TARGET_LIST += msm8996
+JPEG_PIPELINE_TARGET_LIST += apq8098_latv
+JPEG_PIPELINE_TARGET_LIST += msm8998
 
-LOCAL_C_INCLUDES := $(MM_JPEG_TEST_PATH)
+ifneq (,$(filter  $(JPEG_PIPELINE_TARGET_LIST),$(TARGET_BOARD_PLATFORM)))
+    LOCAL_CFLAGS+= -DMM_JPEG_USE_PIPELINE
+endif
+
+# System header file path prefix
+LOCAL_CFLAGS += -DSYSTEM_HEADER_PREFIX=sys
+
+OMX_CORE_DIR := $(MM_JPEG_TEST_PATH)/../../../../mm-image-codec
+
+ifneq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),3.18 4.4 4.9))
+  ifneq ($(LIBION_HEADER_PATH_WRAPPER), )
+    include $(LIBION_HEADER_PATH_WRAPPER)
+    LOCAL_C_INCLUDES := $(LIBION_HEADER_PATHS)
+  else
+    LOCAL_C_INCLUDES := \
+            $(TOP)/system/core/libion/include \
+            $(TOP)/system/core/libion/kernel-headers
+  endif
+endif
+LOCAL_C_INCLUDES += $(MM_JPEG_TEST_PATH)
 LOCAL_C_INCLUDES += $(MM_JPEG_TEST_PATH)/../inc
 LOCAL_C_INCLUDES += $(MM_JPEG_TEST_PATH)/../../common
-LOCAL_C_INCLUDES += $(OMX_HEADER_DIR)
+LOCAL_C_INCLUDES += $(MM_JPEG_TEST_PATH)/../../mm-camera-interface/inc
 LOCAL_C_INCLUDES += $(OMX_CORE_DIR)/qexif
 LOCAL_C_INCLUDES += $(OMX_CORE_DIR)/qomx_core
 
 LOCAL_C_INCLUDES+= $(kernel_includes)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
 
+LOCAL_HEADER_LIBRARIES := media_plugin_headers
 LOCAL_SRC_FILES := mm_jpeg_test.c
 
 LOCAL_32_BIT_ONLY := $(BOARD_QTI_CAMERA_32BIT_ONLY)
 LOCAL_MODULE           := mm-jpeg-interface-test
+LOCAL_VENDOR_MODULE := true
+include $(SDCLANG_COMMON_DEFS)
 LOCAL_PRELINK_MODULE   := false
-LOCAL_SHARED_LIBRARIES := libcutils libdl libmmjpeg_interface
-
+LOCAL_SHARED_LIBRARIES := libcutils libdl liblog libmmjpeg_interface
+ifneq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),3.18 4.4 4.9))
+LOCAL_SHARED_LIBRARIES += libion
+endif
 include $(BUILD_EXECUTABLE)
 
 
@@ -54,25 +81,43 @@ ifeq ($(strip $(TARGET_USES_ION)),true)
 LOCAL_CFLAGS += -DUSE_ION
 endif
 
-OMX_HEADER_DIR := frameworks/native/include/media/openmax
-OMX_CORE_DIR := device/xiaomi/msm8956-common/camera/mm-image-codec
+# System header file path prefix
+LOCAL_CFLAGS += -DSYSTEM_HEADER_PREFIX=sys
 
-LOCAL_C_INCLUDES := $(MM_JPEG_TEST_PATH)
+OMX_CORE_DIR := $(MM_JPEG_TEST_PATH)/../../../../mm-image-codec
+
+ifneq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),3.18 4.4 4.9))
+  ifneq ($(LIBION_HEADER_PATH_WRAPPER), )
+    include $(LIBION_HEADER_PATH_WRAPPER)
+    LOCAL_C_INCLUDES := $(LIBION_HEADER_PATHS)
+  else
+    LOCAL_C_INCLUDES := \
+            $(TOP)/system/core/libion/include \
+            $(TOP)/system/core/libion/kernel-headers
+  endif
+endif
+LOCAL_C_INCLUDES += $(MM_JPEG_TEST_PATH)
 LOCAL_C_INCLUDES += $(MM_JPEG_TEST_PATH)/../inc
 LOCAL_C_INCLUDES += $(MM_JPEG_TEST_PATH)/../../common
-LOCAL_C_INCLUDES += $(OMX_HEADER_DIR)
+LOCAL_C_INCLUDES += $(MM_JPEG_TEST_PATH)/../../mm-camera-interface/inc
 LOCAL_C_INCLUDES += $(OMX_CORE_DIR)/qexif
 LOCAL_C_INCLUDES += $(OMX_CORE_DIR)/qomx_core
 
 LOCAL_C_INCLUDES+= $(kernel_includes)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
 
+LOCAL_HEADER_LIBRARIES := media_plugin_headers
 LOCAL_SRC_FILES := mm_jpegdec_test.c
 
 LOCAL_32_BIT_ONLY := $(BOARD_QTI_CAMERA_32BIT_ONLY)
 LOCAL_MODULE           := mm-jpegdec-interface-test
+LOCAL_VENDOR_MODULE := true
+include $(SDCLANG_COMMON_DEFS)
 LOCAL_PRELINK_MODULE   := false
-LOCAL_SHARED_LIBRARIES := libcutils libdl libmmjpeg_interface
+LOCAL_SHARED_LIBRARIES := libcutils libdl liblog libmmjpeg_interface
+ifneq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),3.18 4.4 4.9))
+LOCAL_SHARED_LIBRARIES += libion
+endif
 
 include $(BUILD_EXECUTABLE)
 
