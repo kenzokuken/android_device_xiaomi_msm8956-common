@@ -188,7 +188,7 @@ TARGET_PER_MGR_ENABLED := true
 TARGET_POWERHAL_VARIANT := qcom
 
 # Properties
-TARGET_SYSTEM_PROP += $(VENDOR_PATH)/system.prop
+TARGET_VENDOR_PROP += $(VENDOR_PATH)/vendor.prop
 
 # Qualcomm
 BOARD_USES_QCOM_HARDWARE := true
