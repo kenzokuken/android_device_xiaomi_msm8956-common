@@ -138,6 +138,12 @@ PRODUCT_PACKAGES += \
     sap.conf \
     xtwifi.conf
 
+# HIDL
+PRODUCT_PACKAGES += \
+    android.hidl.base@1.0 \
+    android.hidl.base@1.0.vendor \
+    android.hidl.manager@1.0
+
 # IPA Manager
 PRODUCT_PACKAGES += \
     ipacm \
