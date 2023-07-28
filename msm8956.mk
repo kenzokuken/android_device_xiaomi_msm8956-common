@@ -50,24 +50,33 @@ PRODUCT_COPY_FILES += \
 
 # ANT+
 PRODUCT_PACKAGES += \
-    AntHalService \
-    com.dsi.ant.antradio_library \
-    libantradio
+    AntHalService
 
 # Audio
 PRODUCT_PACKAGES += \
-    audiod \
+    android.hardware.audio@6.0-impl \
+    android.hardware.audio.effect@6.0-impl \
+    android.hardware.audio.service \
+    android.hardware.bluetooth.audio@2.0-impl \
+    android.hardware.soundtrigger@2.1-impl
+
+PRODUCT_PACKAGES += \
     audio.a2dp.default \
-    audio.primary.msm8952 \
+    audio.bluetooth.default \
+    audio.primary.msm8956 \
     audio.r_submix.default \
-    audio.usb.default \
-    libaudio-resampler \
+    audio.usb.default
+
+PRODUCT_PACKAGES += \
+    libaudiopreprocessing \
     libaudioroute \
-    libqcompostprocbundle \
+    libaacwrapper \
+    libaudio-resampler \
     libqcomvisualizer \
     libqcomvoiceprocessing \
-    libtinycompress \
-    tinymix
+    libqcompostprocbundle \
+    libvolumelistener \
+    libtinycompress
 
 # Audio configuration
 PRODUCT_COPY_FILES += \
@@ -87,62 +96,65 @@ PRODUCT_COPY_FILES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    camera.msm8952 \
-    libqomx_core \
-    libmm-qcamera \
-    Snap
+    android.frameworks.sensorservice@1.0.vendor \
+    android.hardware.camera.provider@2.4-impl \
+    android.hardware.camera.provider@2.4-service
 
-# Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
-    libcnefeatureconfig
+    libstdc++.vendor
 
 # Consumerir
 PRODUCT_PACKAGES += \
-    consumerir.msm8952
-
-# DataServices
-PRODUCT_PACKAGES += \
-    librmnetctl
+    android.hardware.ir@1.0-impl \
+    android.hardware.ir@1.0-service
 
 # Display
 PRODUCT_PACKAGES += \
-    copybit.msm8952 \
-    gralloc.msm8952 \
-    hwcomposer.msm8952 \
-    memtrack.msm8952 \
-    liboverlay
+    android.frameworks.displayservice@1.0.vendor \
+    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.allocator@2.0-service \
+    android.hardware.graphics.mapper@2.0-impl-2.1 \
+    gralloc.msm8956
 
-# Face detection extension
 PRODUCT_PACKAGES += \
-    org.codeaurora.camera
+    android.hardware.graphics.composer@2.1-impl \
+    android.hardware.graphics.composer@2.1-service \
+    hwcomposer.msm8956
 
-# Fingerprint
 PRODUCT_PACKAGES += \
-    fingerprintd
+    android.hardware.memtrack@1.0-impl \
+    android.hardware.memtrack@1.0-service \
+    memtrack.msm8956
+
+PRODUCT_PACKAGES += \
+    libdisplayconfig \
+    liboverlay \
+    libqdMetaData.system \
+    libgenlock \
+    libtinyxml
 
 # FM
 PRODUCT_PACKAGES += \
     FMRadio \
     libfmjni
 
-# GPS
+# GNSS
 PRODUCT_PACKAGES += \
-    gps.msm8952 \
-    libcurl
-
-PRODUCT_PACKAGES += \
-    flp.conf \
-    gps.conf \
-    izat.conf \
-    lowi.conf \
-    sap.conf \
-    xtwifi.conf
+    android.hardware.gnss@1.2.vendor \
+    android.hardware.gnss@2.1.vendor \
+    android.hardware.gnss@3.0.vendor
 
 # HIDL
 PRODUCT_PACKAGES += \
     android.hidl.base@1.0 \
     android.hidl.base@1.0.vendor \
     android.hidl.manager@1.0
+
+PRODUCT_PACKAGES += \
+    libhidltransport \
+    libhidltransport.vendor \
+    libhwbinder \
+    libhwbinder.vendor
 
 # IPA Manager
 PRODUCT_PACKAGES += \
@@ -165,7 +177,7 @@ PRODUCT_COPY_FILES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    lights.msm8952
+    android.hardware.light@2.0-service
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -181,11 +193,12 @@ PRODUCT_COPY_FILES += \
 # OMX
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
-    libextmedia_jni \
+    libmm-omxcore \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxCore \
     libOmxEvrcEnc \
+    libOmxG711Enc \
     libOmxQcelp13Enc \
     libOmxSwVencHevc \
     libOmxVdec \
@@ -194,16 +207,20 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    power.msm8952
+    android.hardware.power@1.2.vendor \
+    android.hardware.power-service-qti
 
 # QTI Whitelist
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/qti_whitelist.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/qti_whitelist.xml
 
-# Qualcomm dependencies
+# QMI
 PRODUCT_PACKAGES += \
-    libtinyxml \
-    libxml2
+    libjson \
+    libqti_vndfwk_detect \
+    libqti_vndfwk_detect.vendor \
+    libvndfwk_detect_jni.qti \
+    libvndfwk_detect_jni.qti.vendor
 
 # Ramdisk
 PRODUCT_PACKAGES += \
@@ -219,7 +236,9 @@ PRODUCT_PACKAGES += \
 
 # Sensors
 PRODUCT_PACKAGES += \
-    sensors.msm8952
+    android.hardware.sensors@1.0-impl \
+    android.hardware.sensors@1.0-service \
+    libsensorndkbridge
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
@@ -236,10 +255,15 @@ PRODUCT_COPY_FILES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
-    libqsap_sdk \
+    android.hardware.wifi@1.0-service \
+    libcld80211 \
     libQWiFiSoftApCfg \
+    libwifi-hal-ctrl \
     libwpa_client \
     hostapd \
+    dhcpcd.conf \
+    wificond \
+    WifiOverlay \
     wpa_supplicant \
     wpa_supplicant.conf
 
